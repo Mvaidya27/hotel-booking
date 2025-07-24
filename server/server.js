@@ -16,7 +16,7 @@ app.use(express.json())
 app.use(clerkMiddleware())
 
 // Api to listen clerk webhooks
-app.use("/api/clerk", clerkWebhooks)
+app.use("/api/clerk", clerkWebhooks);
 
 app.get('/', (req, res) => res.send("API is working"))
 
