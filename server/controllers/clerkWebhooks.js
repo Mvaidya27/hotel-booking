@@ -4,7 +4,7 @@ import { Webhook } from "svix";
 const clerkWebhooks = async (req, res) => {
     try {
         // Create a svix instance with clerk webhook secret.
-        const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET)
+        const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET)
 
         // Getting Headers
         const headers = {
@@ -14,7 +14,7 @@ const clerkWebhooks = async (req, res) => {
         };
 
         // Verifying Headers
-        await webhook.verify(JSON.stringify(req.body), headers)
+        await whook.verify(JSON.stringify(req.body), headers)
 
         // Getting Data from request body
         const { data, type } = req.body
@@ -39,7 +39,7 @@ const clerkWebhooks = async (req, res) => {
             }
 
             case "user.deleted": {
-                await User.findByIdAndDelete(data.id, userData);
+                await User.findByIdAndDelete(data.id);
                 break;
             }
 
