@@ -33,9 +33,12 @@ export const checkAvailabilityAPI = async (req, res) => {
 export const createBooking = async (req, res) => {
     try {
         const { room, checkInDate, checkOutDate, guests } = req.body;
-        const user = req.user._id;
+        const user = req.user?._id || req.auth?.userId;
 
-        // booking check aval before
+        if (!user) {
+            return res.status(401).json({ success: false, message: "User not authenticated" });
+        }
+
         const isAvailable = await checkAvailability({
             checkInDate,
             checkOutDate,
@@ -43,20 +46,19 @@ export const createBooking = async (req, res) => {
         });
 
         if (!isAvailable) {
-            return res.json({ success: true, message: "Room is not available" })
+            return res.json({ success: false, message: "Room is not available" });
         }
 
-        // get totalprice from room
         const roomData = await Room.findById(room).populate("hotel");
         let totalPrice = roomData.pricePerNight;
 
-        //calculate totalprice per night
-        const checkIn = new Data(checkInDate)
-        const checkOut = new Data(checkOutDate)
+        const checkIn = new Date(checkInDate);
+        const checkOut = new Date(checkOutDate);
         const timeDiff = checkOut.getTime() - checkIn.getTime();
         const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
         totalPrice *= nights;
+
         const booking = await Booking.create({
             user,
             room,
@@ -65,7 +67,7 @@ export const createBooking = async (req, res) => {
             checkInDate,
             checkOutDate,
             totalPrice,
-        })
+        });
 
         res.json({ success: true, message: "Booking created successfully" });
 
@@ -74,6 +76,7 @@ export const createBooking = async (req, res) => {
         res.json({ success: false, message: "Failed to create booking" });
     }
 };
+
 
 
 //Api to get all booking for a user
