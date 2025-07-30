@@ -13,7 +13,7 @@ import AddRoom from './pages/hotelOwner/AddRoom';
 import ListRoom from './pages/hotelOwner/ListRoom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAppContext } from './context/AppContext';
+import { useAppContext } from './context/app-context';
 
 const App = () => {
 

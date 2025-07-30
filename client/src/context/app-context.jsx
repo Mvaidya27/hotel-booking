@@ -10,7 +10,7 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
 
-    const currency = import.meta.env.VITE_CURRENCY || "$";
+    const currency = import.meta.env.VITE_CURRENCY || "₹";
     const navigate = useNavigate();
     const { user } = useUser();
     const { getToken } = useAuth();
@@ -28,8 +28,8 @@ export const AppProvider = ({ children }) => {
             } else {
                 // RetryFetching User Details after 5 seconds
                 setTimeout(()=>{
-                    fetchUser()
-                },5000)
+                    fetchUser();
+                },3000)
             }
         } catch (error) {
             toast.error(error.message)
