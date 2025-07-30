@@ -6,12 +6,12 @@ import Room from "../models/Room.js";
 // function to check room is available
 const checkAvailability = async ({ checkInDate, checkOutDate, room }) => {
     try {
-        const booking = await Booking.find({
+        const bookings = await Booking.find({
             room,
-            checkInDate: { $lte: checkInDate },
-            checkOutDate: { $gte: checkOutDate },
+            checkInDate: { $lte: checkOutDate },
+            checkOutDate: { $gte: checkInDate },
         });
-        const isAvailable = booking.length === 0;
+        const isAvailable = bookings.length === 0;
         return isAvailable;
     } catch (error) {
         console.error(error.message);
@@ -100,7 +100,7 @@ export const getHotelBookings = async (req, res) => {
         const totalBookings = bookings.length;
 
         //total revenue
-        const totalRevenue = bookings.reduce((acc, booking) => acc + booking.totalPrice.totalPrice, 0)
+        const totalRevenue = bookings.reduce((acc, booking) => acc + booking.totalPrice, 0)
 
         res.json({ success: true, dashboardData: { totalBookings, totalRevenue, bookings } })
     } catch (error) {
